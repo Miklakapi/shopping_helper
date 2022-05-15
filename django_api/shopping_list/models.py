@@ -9,3 +9,6 @@ class ShoppingList(models.Model):
 
     class Meta:
         db_table = "shopping_list"
+
+    def __str__(self):
+        return self.name
