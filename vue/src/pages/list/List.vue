@@ -55,7 +55,7 @@ export default {
             this.formData.success = false;
         },
         loadList() {
-            fetch('http://server.local:5000/getShoppingList')
+            fetch('http://localhost:8080/shopping-list/getAll')
             .then(async response => {
                 const responseData = await response.json();
 
@@ -65,7 +65,7 @@ export default {
                 }
 
                 this.isLoading = false;
-                this.data = responseData.data;
+                this.data = responseData;
             })
             .catch(error => {
                 this.error.message = error;
@@ -79,11 +79,10 @@ export default {
                 id: null,
                 name: data.product,
                 quantity: data.quantity,
-                date: data.date,
                 owner: data.owner
             }
 
-            fetch(`http://server.local:5000//addShoppingListElement`, {
+            fetch(`http://localhost:8080/shopping-list/add`, {
                 method: 'POST',
                 body: JSON.stringify(element)
             })
@@ -95,7 +94,8 @@ export default {
                     return Promise.reject(error);
                 }
 
-                element['id'] = responseData.data;
+                element['id'] = responseData['id'];
+                element['date'] = responseData['date'];
                 this.data.push(element);
                 this.formData.success = true;
             })
@@ -104,8 +104,9 @@ export default {
             });
         },
         deleteElement(id) {
-            fetch('http://server.local:5000/delShoppingListElement', {
-                    method: 'DELETE',
+            fetch('http://localhost:8080/shopping-list/delete/' + id, {
+                    method: 'POST',
+                    // headers: {'X-CSRFToken': csrftoken},
                     body: JSON.stringify(id)
                 })
                 .then(async response => {
