@@ -79,11 +79,15 @@ export default {
                 id: null,
                 name: data.product,
                 quantity: data.quantity,
-                owner: data.owner
+                owner: data.owner,
+                date: null
             }
 
             fetch(`http://localhost:8080/shopping-list/add`, {
                 method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
                 body: JSON.stringify(element)
             })
             .then(async response => {
@@ -105,9 +109,7 @@ export default {
         },
         deleteElement(id) {
             fetch('http://localhost:8080/shopping-list/delete/' + id, {
-                    method: 'POST',
-                    // headers: {'X-CSRFToken': csrftoken},
-                    body: JSON.stringify(id)
+                    method: 'DELETE'
                 })
                 .then(async response => {
                     const responseData = await response.json();
