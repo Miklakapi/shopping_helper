@@ -55,7 +55,7 @@ export default {
             this.formData.success = false;
         },
         loadList() {
-            fetch('http://localhost:8080/shopping-list/getAll')
+            fetch('http://localhost:8080/shopping-list/')
             .then(async response => {
                 const responseData = await response.json();
 
@@ -83,7 +83,7 @@ export default {
                 date: null
             }
 
-            fetch(`http://localhost:8080/shopping-list/add`, {
+            fetch(`http://localhost:8080/shopping-list/`, {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -100,7 +100,7 @@ export default {
 
                 element['id'] = responseData['id'];
                 element['date'] = responseData['date'];
-                this.data.push(element);
+                this.data.unshift(element);
                 this.formData.success = true;
             })
             .catch(error => {
@@ -108,11 +108,10 @@ export default {
             });
         },
         deleteElement(id) {
-            fetch('http://localhost:8080/shopping-list/delete/' + id, {
+            fetch('http://localhost:8080/shopping-list/id/' + id, {
                     method: 'DELETE'
                 })
                 .then(async response => {
-                    const responseData = await response.json();
 
                     if (!response.ok) {
                         const error = (responseData && responseData.message) || response.statusText;

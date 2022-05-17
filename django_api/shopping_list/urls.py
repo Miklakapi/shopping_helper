@@ -3,8 +3,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('getAll', views.getAll),
-    path('getById/<int:id>', views.getById),
-    path('delete/<int:id>', views.delete),
-    path('add', views.add),
+    path('', views.ShoppingListCreateAPIView.as_view()),
+    path('id/<int:pk>', views.ShoppingListRetrieveDestroyAPIView.as_view()),
 ]
