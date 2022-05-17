@@ -1,6 +1,6 @@
 export default {
-    username(state) {
-        return state.user.username;
+    name(state) {
+        return state.user.name;
     },
     isLogin(state) {
         if (state.user.username && state.user.username.length > 0) {
