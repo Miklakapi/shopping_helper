@@ -1,14 +1,14 @@
 <template>
     <header>
         <div class="icon" @click="expand">
-            <icon-list :class="{animateIcon: animateIcon}" @animationend="animateIcon = false"></icon-list>
+            <icon-list :class="{animateIcon: animateIcon}" @animationend="animateIcon=false"></icon-list>
         </div>
         <div class="title">
             <router-link  to="/dashboard">Shopping Helper</router-link>
         </div>
         <div class="username">Username: 
             <code v-if="isLogin">{{ username }}</code>
-            <code v-else>Not logged in</code>
+            <code v-else>-</code>
         </div>
         <router-link class="logout" to="/logout">Logout</router-link>
     </header>
@@ -32,7 +32,7 @@ export default {
             return this.$store.getters['user/isLogin'];
         },
         username() {
-            return this.$store.getters['user/username'];
+            return this.$store.getters['user/name'];
         },
     },
     methods: {
@@ -110,7 +110,7 @@ header {
 
         code {
             margin-left: 5px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             background-color: lighten(#272c30, 5%);
             border-radius: 0.5rem;
             padding-left: 10px;
