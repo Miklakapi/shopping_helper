@@ -10,7 +10,7 @@
             <code v-if="isLogin">{{ username }}</code>
             <code v-else>-</code>
         </div>
-        <router-link class="logout" to="/logout">Logout</router-link>
+        <a href="#" class="logout" @click="logout">Logout</a>
     </header>
 </template>
 
@@ -39,6 +39,10 @@ export default {
         expand() {
             this.animateIcon = !this.animateIcon;
             this.$emit('toogleSidebar');
+        },
+        logout() {
+            this.$store.dispatch('user/logout');
+            this.$router.replace('/');
         }
     }
 }
