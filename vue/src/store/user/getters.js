@@ -1,12 +1,15 @@
 export default {
     name(state) {
-        return state.user.name;
+        return state.username;
     },
     isLogin(state) {
-        if (state.user.username && state.user.username.length > 0) {
+        if (state.username && state.username.length > 0) {
             return true;
         } else {
             return false;
         }
+    },
+    token(state) {
+        return state.token;
     }
 };

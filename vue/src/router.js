@@ -7,19 +7,29 @@ import History from'./pages/history/History.vue';
 import List from'./pages/list/List.vue';
 import Product from'./pages/product/Product.vue';
 import Category from'./pages/category/Category.vue';
+import store from './store/index.js';
 
 const router = createRouter({
     history: createWebHistory(),
     routes: [
-        { path: '/', component: Login },
-        { path: '/logout', component: null },
-        { path: '/dashboard', component: Dashboard },
-        { path: '/list', component: List },
-        { path: '/history', component: History },
-        { path: '/product', component: Product },
-        { path: '/category', component: Category },
-        { path: '/:notFound(.*)', component: NotFound }
+        { path: '/', component: Login, meta: { requireAuth: false } },
+        { path: '/dashboard', component: Dashboard, meta: { requireAuth: true } },
+        { path: '/list', component: List, meta: { requireAuth: true } },
+        { path: '/history', component: History, meta: { requireAuth: true } },
+        { path: '/product', component: Product, meta: { requireAuth: true } },
+        { path: '/category', component: Category, meta: { requireAuth: true } },
+        { path: '/:notFound(.*)', component: NotFound, meta: { requireAuth: true } }
     ],
+});
+
+router.beforeEach(function (to, from, next) {
+    if (to.meta.requireAuth && !store.getters.isLogin) {
+        next('/');
+    } else if (!to.meta.requireAuth && store.getters.isLogin){
+        next('/dashboard');
+    } else {
+        next();
+    }
 });
 
 export default router;

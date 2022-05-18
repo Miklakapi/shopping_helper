@@ -6,7 +6,8 @@ export default {
     namespaced: true,
     state() {
         return {
-            user: {}
+            token: null,
+            username: null
         };
     },
     mutations,
