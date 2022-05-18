@@ -1,24 +1,29 @@
 <template>
-    <box-with-title>
-        <template v-slot:head>Login</template>
-        <template v-slot:default>
-            <form @submit.prevent="">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Username" v-model.trim="username.val">
-                    <span class="invalid" v-if="!username.isValid">
-                        Invalid username.
-                    </span>
-                </div>
-                <div class="input-group">
-                    <input type="password" class="form-control" placeholder="Password" v-model.trim="password.val">
-                    <span class="invalid" v-if="!password.isValid">
-                        Invalid password.
-                    </span>
-                </div>
-                <button type="button" class="btn btn-primary center-block" @click="login">Login</button>
-            </form>
-        </template>
-    </box-with-title>
+    <section>
+        <error-dialog v-if="error.dialog" @close="closeError">
+            <template v-slot:default>{{ error.message }}</template>
+        </error-dialog>
+        <box-with-title>
+            <template v-slot:head>Login</template>
+            <template v-slot:default>
+                <form @submit.prevent="">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Username" v-model.trim="username.val">
+                        <span class="invalid" v-if="!username.isValid">
+                            Invalid username.
+                        </span>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" class="form-control" placeholder="Password" v-model.trim="password.val">
+                        <span class="invalid" v-if="!password.isValid">
+                            Invalid password.
+                        </span>
+                    </div>
+                    <button type="button" class="btn btn-primary center-block" @click="login">Login</button>
+                </form>
+            </template>
+        </box-with-title>
+    </section>
 </template>
 
 <script>
@@ -32,10 +37,18 @@ export default {
             password: {
                 val: '',
                 isValid: true
+            },
+            error: {
+                message: null,
+                dialog: false
             }
         }
     },
     methods: {
+        closeError() {
+            this.error.message = null,
+            this.error.dialog = false
+        },
         validateForm() {
             if (this.username.val === '') {
                 this.username.isValid = false;
@@ -52,12 +65,20 @@ export default {
             if (this.username.isValid === false || this.password.isValid === false) return false;
             return true;
         },
-        login() {
+        async login() {
             if (this.validateForm() === false) return;
 
             const formData = {
                 username: this.username.val,
                 password: this.password.val,
+            }
+
+            const response = await this.$store.dispatch('user/login', formData);
+            if (response === true) {
+                this.$router.replace('/dashboard');
+            } else {
+                this.error.message = response;
+                this.error.dialog = true;
             }
         },
     }
