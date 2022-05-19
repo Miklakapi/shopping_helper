@@ -1,5 +1,5 @@
 export default {
-    name(state) {
+    username(state) {
         return state.username;
     },
     isLogin(state) {
@@ -8,5 +8,11 @@ export default {
         } else {
             return false;
         }
+    },
+    token(state) {
+        if (state.token === null) {
+            state.token = localStorage.getItem('token'); 
+        } 
+        return state.token;
     }
 };

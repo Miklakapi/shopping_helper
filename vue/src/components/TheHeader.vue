@@ -32,7 +32,7 @@ export default {
             return this.$store.getters['user/isLogin'];
         },
         username() {
-            return this.$store.getters['user/name'];
+            return this.$store.getters['user/username'];
         },
     },
     methods: {
