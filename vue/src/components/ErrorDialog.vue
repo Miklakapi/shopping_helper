@@ -6,12 +6,10 @@
                 <slot name='head'>Error</slot>
             </div>
             <div class="formContainer">
-                <form @submit.prevent="">
-                    <slot></slot>
-                    <div>
-                        <button type="button" @click="close" class="btn btn-danger float-end">Close</button>
-                    </div>
-                </form>
+                <slot></slot>
+                <div>
+                    <button type="button" @click="close" class="btn btn-danger float-end">Close</button>
+                </div>
             </div>
         </div>
     </section>
@@ -94,6 +92,7 @@ section {
         .formContainer {
             width: 450px;
             padding: 20px;
+            text-align: center;
 
             button {
                 margin: 20px;
