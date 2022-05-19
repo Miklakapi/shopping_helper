@@ -34,6 +34,14 @@ export default {
         toogleExpand() {
             this.expanded = !this.expanded;
         }
+    },
+    async created() {
+        try {
+            await this.$store.dispatch('user/tryLogin');
+        } catch(error) {
+            this.$store.dispatch('user/logout');
+            this.$router.replace('/');
+        }
     }
 }
 </script>
