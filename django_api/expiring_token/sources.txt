@@ -1,0 +1,2 @@
+The expiring token is based on the Klemen Štrajhar project.
+https://github.com/KlemenS189/django-expiring-token

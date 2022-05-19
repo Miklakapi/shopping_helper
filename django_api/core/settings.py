@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'django_expiring_token',
+    'expiring_token',
     'shopping_list',
     'corsheaders',
 ]
@@ -139,7 +139,7 @@ EXPIRING_TOKEN_DURATION = datetime.timedelta(days=3)
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
-        "django_expiring_token.authentication.ExpiringTokenAuthentication",
+        "expiring_token.authentication.ExpiringTokenAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated"

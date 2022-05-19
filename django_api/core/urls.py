@@ -19,6 +19,6 @@ from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('django_expiring_token.urls')),
+    path('', include('expiring_token.urls')),
     path('shopping-list/', include('shopping_list.urls')),
 ]
