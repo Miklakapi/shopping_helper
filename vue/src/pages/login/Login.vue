@@ -73,13 +73,15 @@ export default {
                 password: this.password.val,
             }
 
-            const response = await this.$store.dispatch('user/login', formData);
-            if (response === true) {
-                this.$router.replace('/dashboard');
-            } else {
-                this.error.message = response;
+            try {
+                const response = await this.$store.dispatch('user/login', formData);
+            } catch(error) {
+                this.error.message = error;
                 this.error.dialog = true;
+                return;
             }
+
+            this.$router.replace('/dashboard');
         },
     }
 }
