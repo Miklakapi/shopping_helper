@@ -55,14 +55,24 @@ export default {
             this.formData.success = false;
         },
         loadList() {
-            fetch('http://localhost:8080/shopping-list/')
-            .then(async response => {
-                const responseData = await response.json();
-
-                if (!response.ok) {
-                    const error = (responseData && responseData.message) || response.statusText;
-                    return Promise.reject(error);
+            fetch('http://localhost:8080/shopping-list/', {
+                headers: {
+                    'Authorization': `Token ${this.$store.getters['user/token']}`
                 }
+            })
+            .then(async response => {
+                
+                if (!response.ok) {
+                    let status = response.status;
+
+                    if (status == 403) status = "Access denied.";
+                    else if (status >= 500) status = "An error occurred on the server side. Please contact the administrator.";
+                    else status = "An error occurred while getting data from the server."
+
+                    return Promise.reject(status);
+                }
+                
+                const responseData = await response.json();
 
                 this.isLoading = false;
                 this.data = responseData;
@@ -86,17 +96,19 @@ export default {
             fetch(`http://localhost:8080/shopping-list/`, {
                 method: 'POST',
                 headers: {
-                    'Content-type': 'application/json'
+                    'Content-type': 'application/json',
+                    'Authorization': `Token ${this.$store.getters['user/token']}`
                 },
                 body: JSON.stringify(element)
             })
             .then(async response => {
-                const responseData = await response.json();
 
                 if (!response.ok) {
-                    const error = (responseData && responseData.message) || response.statusText;
+                    const error = response.statusText;
                     return Promise.reject(error);
                 }
+
+                const responseData = await response.json();
 
                 element['id'] = responseData['id'];
                 element['date'] = responseData['date'];
@@ -109,13 +121,21 @@ export default {
         },
         deleteElement(id) {
             fetch('http://localhost:8080/shopping-list/id/' + id, {
-                    method: 'DELETE'
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Token ${this.$store.getters['user/token']}`
+                    }
                 })
                 .then(async response => {
-
+                    
                     if (!response.ok) {
-                        const error = (responseData && responseData.message) || response.statusText;
-                        return Promise.reject(error);
+                        let status = response.status;
+
+                        if (status == 403) status = "Access denied.";
+                        else if (status >= 500) status = "An error occurred on the server side. Please contact the administrator.";
+                        else status = "An error occurred while removing the product."
+
+                        return Promise.reject(status);
                     }
 
                     this.data.splice(this.data.findIndex(function(i){
