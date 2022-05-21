@@ -74,7 +74,7 @@ export default {
             this.form.success = false;
         },
         loadCategory() {
-            fetch('http://localhost:8080/categories/', {
+            fetch('http://localhost:8080/category/', {
                 headers: {
                     'Authorization': `Token ${this.$store.getters['user/token']}`
                 }
@@ -109,7 +109,7 @@ export default {
                 name: data.category,
             }
 
-            fetch(`http://localhost:8080/categories/`, {
+            fetch(`http://localhost:8080/category/`, {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json',
@@ -140,7 +140,7 @@ export default {
                 name: data.category,
             }
 
-            fetch('http://localhost:8080/categories/id/' + id, {
+            fetch('http://localhost:8080/category/id/' + id, {
                 method: 'PUT',
                 headers: {
                     'Content-type': 'application/json',

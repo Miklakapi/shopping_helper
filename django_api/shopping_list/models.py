@@ -10,6 +10,7 @@ class ShoppingList(models.Model):
     class Meta:
         db_table = "shopping_list"
         ordering = ['-id']
+        verbose_name_plural = "Shopping list"
 
     def __str__(self):
         return self.name
