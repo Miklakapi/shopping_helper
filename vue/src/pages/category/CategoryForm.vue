@@ -1,5 +1,5 @@
 <template>
-    <form-dialog @back="back" @add="add" :error="error" :success="success">
+    <form-dialog @back="back" @add="add" :error="error" :success="success" v-on:keyup.enter="add">
         <template v-slot:head>
             Adding a category to the database
         </template>

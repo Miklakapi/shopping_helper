@@ -6,7 +6,7 @@
         <box-with-title>
             <template v-slot:head>Login</template>
             <template v-slot:default>
-                <form @submit.prevent="">
+                <form @submit.prevent="" v-on:keyup.enter="login">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Username" v-model.trim="username.val">
                         <span class="invalid" v-if="!username.isValid">
