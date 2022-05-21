@@ -1,4 +1,4 @@
-from rest_framework import authentication, generics, permissions
+from rest_framework import generics
 from .models import ShoppingList
 from .serializers import ShoppingListSerializer
 
