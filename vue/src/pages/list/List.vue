@@ -1,15 +1,25 @@
 <template>
     <section>
-        <list-form v-if="form" @close="closeForm" :success="formData.success" :error="formData.error" @reset="resetForm" @add="addElement"></list-form>
-        <error-dialog v-if="error.dialog" @close="closeError">
-            <template v-slot:default>{{ error.message }}</template>
-        </error-dialog>
+        <list-form 
+            v-if="form.form" 
+            :success="form.success" 
+            :error="form.error" 
+            @close="closeAndResetForm" 
+            @reset="resetForm" 
+            @add="addElement">
+        </list-form>
+        <error-dialog v-if="error.dialog" @close="error.dialog=false"><template v-slot:default>{{ error.message }}</template></error-dialog>
         <h1>Shopping List</h1>
         <box>
             <spinner v-if="isLoading"></spinner>
             <span v-else>
                 <error-data v-if="error.status"></error-data>
-                <list-table v-else :data="data" @add="add" @delete="deleteElement"></list-table>
+                <list-table 
+                    v-else 
+                    :data="data" 
+                    @add="add" 
+                    @delete="deleteElement">
+                </list-table>
             </span>
         </box> 
     </section>
@@ -22,15 +32,15 @@ import ListForm from './ListForm.vue';
 export default {
     data() {
         return {
-            form: false,
+            form: {
+                form: false,
+                error: false,
+                success: false
+            },
             error: {
                 message: null,
                 dialog: false,
                 status: false
-            },
-            formData: {
-                error: false,
-                success: false
             },
             isLoading: true,
             data: []
@@ -41,18 +51,16 @@ export default {
         'listTable': ListTable
     },
     methods: {
-        closeForm() {
-            this.form = false;
-        },
-        closeError() {
-            this.error.dialog = false;
-        },
         add() {
-            this.form = true;
+            this.form.form = true;
+        },
+        closeAndResetForm() {
+            this.form.form = false;
+            this.resetForm();
         },
         resetForm() {
-            this.formData.error = false;
-            this.formData.success = false;
+            this.form.error = false;
+            this.form.success = false;
         },
         loadList() {
             fetch('http://localhost:8080/shopping-list/', {
@@ -113,10 +121,10 @@ export default {
                 element['id'] = responseData['id'];
                 element['date'] = responseData['date'];
                 this.data.unshift(element);
-                this.formData.success = true;
+                this.form.success = true;
             })
             .catch(error => {
-                this.formData.error = true;
+                this.form.error = true;
             });
         },
         deleteElement(id) {

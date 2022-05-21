@@ -3,7 +3,7 @@ from .models import Categories
 from .serializers import CategoriesSerializer
 
 
-class CategoriesRetrieveDestroyAPIView(generics.RetrieveDestroyAPIView):
+class CategoriesRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
     queryset = Categories.objects.all()
     serializer_class = CategoriesSerializer
 
