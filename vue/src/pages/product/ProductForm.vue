@@ -94,7 +94,7 @@ export default {
     created() {
         if (this.type) {
             this.product.val = this.editData.name;
-            this.category.val = this.editData.category_id;
+            this.category.val = this.editData.category;
         }
     }
 }

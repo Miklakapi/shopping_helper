@@ -3,14 +3,14 @@
         <template v-slot:head>
             <th>Id</th>
             <th>Product</th>
-            <th>Parent Category</th>
+            <th>Category</th>
             <th>Edit</th>
         </template>
         <template v-slot:default>
             <tr v-for="product in data" :key="product.id">
                 <td scope="row">{{ product.id }}</td>
                 <td>{{ product.name }}</td>
-                <td>{{ nameFromId(product.category_id) }}</td>
+                <td>{{ product.category_name }}</td>
                 <td class="col-1">
                     <div class="confirm" @click="edit(product.id)">
                         <pen></pen>
@@ -25,7 +25,7 @@
 import { BIconPenFill } from 'bootstrap-icons-vue';
 
 export default {
-    props: ['data', 'categoryNames'],
+    props: ['data'],
     emits: ['add', 'edit'],
     components: {
         'pen': BIconPenFill
@@ -36,13 +36,6 @@ export default {
         },
         edit(id) {
             this.$emit('edit', id);
-        },
-        nameFromId(id) {
-            const found = this.categoryNames.find(element => element.id === id);
-            if (found === undefined) {
-                return id
-            }
-            return found.name;
         }
     }
 }

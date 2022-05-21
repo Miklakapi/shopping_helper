@@ -4,7 +4,7 @@
             v-if="form.form" 
             :success="form.success" 
             :error="form.error" 
-            :data="categoryNames" 
+            :data="categories" 
             :type="form.edit" 
             :editData="editData" 
             @close="closeAndResetForm" 
@@ -20,8 +20,7 @@
                 <error-data v-if="error.status"></error-data>
                 <product-table 
                     v-else 
-                    :data="data" 
-                    :categoryNames="categoryNames" 
+                    :data="data"
                     @add="add"
                     @edit="edit">
                 </product-table>
@@ -50,7 +49,7 @@ export default {
             },
             isLoading: true,
             data: [],
-            categoryNames: [],
+            categories: [],
             editData: null
         };
     },
@@ -77,17 +76,27 @@ export default {
             this.form.success = false;
         },
         loadProducts() {
-            fetch('http://server.local:5000/getProducts')
+            fetch('http://localhost:8080/product/', {
+                headers: {
+                    'Authorization': `Token ${this.$store.getters['user/token']}`
+                }
+            })
             .then(async response => {
+                
+                if (!response.ok) {
+                    let status = response.status;
+
+                    if (status == 403) status = "Access denied.";
+                    else if (status >= 500) status = "An error occurred on the server side. Please contact the administrator.";
+                    else status = "An error occurred while getting data from the server."
+
+                    return Promise.reject(status);
+                }
+                
                 const responseData = await response.json();
 
-                if (!response.ok) {
-                    const error = (responseData && responseData.message) || response.statusText;
-                    return Promise.reject(error);
-                }
-
                 this.isLoading = false;
-                this.data = responseData.data;
+                this.data = responseData;
             })
             .catch(error => {
                 this.error.message = error;
@@ -96,20 +105,31 @@ export default {
                 this.isLoading = false;
             });
         },
-        loadCategoryNames() {
-            fetch('http://server.local:5000/getCategoryNames')
+        loadCategories() {
+            fetch('http://localhost:8080/category/', {
+                headers: {
+                    'Authorization': `Token ${this.$store.getters['user/token']}`
+                }
+            })
             .then(async response => {
+                
+                if (!response.ok) {
+                    let status = response.status;
+
+                    if (status == 403) status = "Access denied to category.";
+                    else if (status >= 500) status = "An error occurred on the server side. Please contact the administrator.";
+                    else status = "An error occurred while getting data from the server."
+
+                    return Promise.reject(status);
+                }
+                
                 const responseData = await response.json();
 
-                if (!response.ok) {
-                    const error = (responseData && responseData.message) || response.statusText;
-                    return Promise.reject(error);
-                }
-
                 this.isLoading = false;
-                this.categoryNames = responseData.data;
+                this.categories = responseData;
             })
             .catch(error => {
+                this.data = [];
                 this.error.message = error;
                 this.error.dialog = true;
                 this.error.status = true;
@@ -118,24 +138,30 @@ export default {
         },
         addElement(data) {
             const element = {
-                id: null,
                 name: data.product,
-                category_id: data.category,
+                category: data.category,
             }
 
-            fetch(`http://server.local:5000//addProduct`, {
+            fetch(`http://localhost:8080/product/`, {
                 method: 'POST',
+                headers: {
+                    'Content-type': 'application/json',
+                    'Authorization': `Token ${this.$store.getters['user/token']}`
+                },
                 body: JSON.stringify(element)
             })
             .then(async response => {
-                const responseData = await response.json();
-
+                
                 if (!response.ok) {
-                    const error = (responseData && responseData.message) || response.statusText;
+                    const error = response.statusText;
                     return Promise.reject(error);
                 }
+                
+                const responseData = await response.json();
 
-                element['id'] = responseData.data;
+                element['id'] = responseData['id'];
+                element['category'] = responseData['category'];
+                element['category_name'] = responseData['category_name'];
                 this.data.push(element);
                 this.form.success = true;
             })
@@ -144,27 +170,34 @@ export default {
             });
         },
         editElement(data) {
+            const id = data.id;
             const element = {
-                id: data.id,
                 name: data.product,
-                category_id: data.category,
+                category: data.category,
             }
 
-            fetch('http://server.local:5000/editProduct', {
-                method: 'POST',
+            fetch('http://localhost:8080/product/id/' + id, {
+                method: 'PUT',
+                headers: {
+                    'Content-type': 'application/json',
+                    'Authorization': `Token ${this.$store.getters['user/token']}`
+                },
                 body: JSON.stringify(element)
             })
             .then(async response => {
-                const responseData = await response.json();
-
+                
                 if (!response.ok) {
-                    const error = (responseData && responseData.message) || response.statusText;
+                    const error = response.statusText;
                     return Promise.reject(error);
                 }
+
+                const responseData = await response.json();
+
                 this.form.success = true;
-                const found = this.data.find(el => el.id === element.id);
-                found.name = element.name; 
-                found.category_id = element.category_id; 
+                const found = this.data.find(el => el.id === id);
+                found.name = responseData['name'];
+                found.category = responseData['category'];
+                found.category_name = responseData['category_name'];
                 this.closeAndResetForm();
             })
             .catch(error => {
@@ -174,7 +207,7 @@ export default {
     },
     created() {
         this.loadProducts();
-        this.loadCategoryNames();
+        this.loadCategories();
     }
 }
 </script>
