@@ -16,7 +16,7 @@
                 <td>{{ element.quantity }}</td>
                 <td>{{ element.price }}</td>
                 <td>{{ element.date }}</td>
-                <td>{{ element.owner }}</td>
+                <td>{{ element.owner_name }}</td>
                 <td class="col-1">
                     <div class="confirm" @click="edit(element.id)">
                         <pen></pen>

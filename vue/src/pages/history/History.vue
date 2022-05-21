@@ -141,7 +141,6 @@ export default {
                 quantity: data.quantity,
                 price: data.price,
                 date: data.date,
-                owner: data.owner,
                 product: data.product
             }
 
@@ -165,6 +164,7 @@ export default {
                 element['id'] = responseData['id'];
                 element['product'] = responseData['product'];
                 element['product_name'] = responseData['product_name'];
+                element['owner_name'] = responseData['owner_name'];
                 this.data.unshift(element);
                 this.form.success = true;
             })
@@ -178,7 +178,6 @@ export default {
                 quantity: data.quantity,
                 price: data.price,
                 date: data.date,
-                owner: data.owner,
                 product: data.product
             }
 
@@ -204,7 +203,7 @@ export default {
                 found.quantity = responseData['quantity']; 
                 found.price = responseData['price'];
                 found.date = responseData['date'];
-                found.owner = responseData['owner'];
+                found.owner_name = responseData['owner_name'];
                 found.product = responseData['product']; 
                 found.product_name = responseData['product_name']; 
                 this.closeAndResetForm();

@@ -38,6 +38,10 @@
                     Invalid date.
                 </span>
             </div>
+            <div v-if="type" class="input-group">
+                <span class="input-group-text">Owner</span>
+                <input type="number" disabled class="form-control" :placeholder="editData.owner_name">
+            </div>
         </template>
         <template v-if="type" v-slot:add>Edit</template>
     </form-dialog>
@@ -127,8 +131,7 @@ export default {
                     product: this.product.val,
                     quantity: this.quantity.val,
                     price: this.price.val,
-                    date: this.date.val,
-                    owner: this.editData.owner
+                    date: this.date.val
                 };
                 this.$emit('edit', formData);
             } else {
@@ -136,8 +139,7 @@ export default {
                     product: this.product.val,
                     quantity: this.quantity.val,
                     price: this.price.val,
-                    date: this.date.val,
-                    owner: this.$store.getters['user/username']
+                    date: this.date.val
                 };
                 this.$emit('add', formData);
                 

@@ -73,8 +73,7 @@ export default {
             const formData = {
                 product: this.product.val,
                 quantity: this.quantity.val,
-                date: new Date().toISOString().slice(0, 10),
-                owner: this.$store.getters['user/username']
+                date: new Date().toISOString().slice(0, 10)
             }
 
             this.$emit('add', formData);
