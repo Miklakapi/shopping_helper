@@ -13,7 +13,11 @@ const router = createRouter({
     history: createWebHistory(),
     routes: [
         { path: '/', component: Login, meta: { requireAuth: false } },
-        { path: '/dashboard', component: Dashboard, meta: { requireAuth: true } },
+        { path: '/dashboard', component: Dashboard, meta: { requireAuth: true },
+            children: [
+                { path: '/periodic-expenses', component: null, meta: {requireAuth: true} }
+            ]
+        },
         { path: '/list', component: List, meta: { requireAuth: true } },
         { path: '/history', component: History, meta: { requireAuth: true } },
         { path: '/product', component: Product, meta: { requireAuth: true } },
