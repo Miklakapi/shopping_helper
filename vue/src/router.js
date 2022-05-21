@@ -7,6 +7,7 @@ import History from'./pages/history/History.vue';
 import List from'./pages/list/List.vue';
 import Product from'./pages/product/Product.vue';
 import Category from'./pages/category/Category.vue';
+import store from './store/index.js';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -22,13 +23,14 @@ const router = createRouter({
 });
 
 router.beforeEach(function (to, from, next) {
-    if (to.meta.requireAuth && !localStorage.getItem('token')) {
+    if (to.meta.requireAuth && !store.getters['user/isLogin']) {
         next('/');
-    } else if (!to.meta.requireAuth && localStorage.getItem('token')){
+    } else if (!to.meta.requireAuth && store.getters['user/isLogin']) {
         next('/dashboard');
     } else {
         next();
     }
+   
 });
 
 export default router;

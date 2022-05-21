@@ -14,8 +14,13 @@ import DataTable from './components/DataTable.vue';
 
 const app = createApp(App);
 
-app.use(router);
 app.use(store);
+try {
+    await store.dispatch('user/tryLogin');
+} catch(error) {
+    store.dispatch('user/logout');
+}
+app.use(router);
 
 app.component('box', Box);
 app.component('boxWithTitle', BoxWithTitle);
