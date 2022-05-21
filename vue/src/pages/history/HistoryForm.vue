@@ -156,10 +156,13 @@ export default {
     },
     created() {
         if (this.type) {
-            this.product.val = this.editData.product_id;
+            this.product.val = this.editData.product;
             this.quantity.val = this.editData.quantity;
             this.price.val = this.editData.price;
             this.date.val = this.editData.date;
+        } else {
+            const date = new Date();
+            this.date.val = date.toISOString().split('T')[0];
         }
     }
 }

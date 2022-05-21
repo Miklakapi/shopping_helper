@@ -12,7 +12,7 @@
         <template v-slot:default>
             <tr v-for="element in data" :key="element.id">
                 <td scope="row">{{ element.id }}</td>
-                <td>{{ nameFromId(element.product_id) }}</td>
+                <td>{{ element.product_name }}</td>
                 <td>{{ element.quantity }}</td>
                 <td>{{ element.price }}</td>
                 <td>{{ element.date }}</td>
@@ -31,7 +31,7 @@
 import { BIconPenFill } from 'bootstrap-icons-vue';
 
 export default {
-    props: ['data', 'productNames'],
+    props: ['data'],
     emits: ['add', 'edit'],
     components: {
         'pen': BIconPenFill
@@ -42,13 +42,6 @@ export default {
         },
         edit(id) {
             this.$emit('edit', id);
-        },
-        nameFromId(id) {
-            const found = this.productNames.find(element => element.id === id);
-            if (found === undefined) {
-                return id
-            }
-            return found.name;
         }
     }
 }

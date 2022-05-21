@@ -4,7 +4,7 @@
             v-if="form.form" 
             :success="form.success" 
             :error="form.error" 
-            :data="productNames"
+            :data="products"
             :type="form.edit"
             :editData="editData"
             @close="closeAndResetForm" 
@@ -20,8 +20,7 @@
                 <error-data v-if="error.status"></error-data>
                 <history-table 
                     v-else 
-                    :data="data" 
-                    :productNames="productNames" 
+                    :data="data"
                     @add="add" 
                     @edit="edit">
                 </history-table>
@@ -50,7 +49,7 @@ export default {
             },
             isLoading: true,
             data: [],
-            productNames: [],
+            products: [],
             editData: null
         };
     },
@@ -77,17 +76,27 @@ export default {
             this.form.success = false;
         },
         loadHistory() {
-            fetch('http://server.local:5000/getHistory')
+            fetch('http://localhost:8080/history/', {
+                headers: {
+                    'Authorization': `Token ${this.$store.getters['user/token']}`
+                }
+            })
             .then(async response => {
-                const responseData = await response.json();
-
+                
                 if (!response.ok) {
-                    const error = (responseData && responseData.message) || response.statusText;
-                    return Promise.reject(error);
+                    let status = response.status;
+
+                    if (status == 403) status = "Access denied.";
+                    else if (status >= 500) status = "An error occurred on the server side. Please contact the administrator.";
+                    else status = "An error occurred while getting data from the server."
+
+                    return Promise.reject(status);
                 }
 
+                const responseData = await response.json();
+
                 this.isLoading = false;
-                this.data = responseData.data;
+                this.data = responseData;
             })
             .catch(error => {
                 this.error.message = error;
@@ -96,20 +105,31 @@ export default {
                 this.isLoading = false;
             });
         },
-        loadProductNames() {
-            fetch('http://server.local:5000/getProductNames')
+        loadProducts() {
+            fetch('http://localhost:8080/product/base/', {
+                headers: {
+                    'Authorization': `Token ${this.$store.getters['user/token']}`
+                }
+            })
             .then(async response => {
-                const responseData = await response.json();
-
+                
                 if (!response.ok) {
-                    const error = (responseData && responseData.message) || response.statusText;
-                    return Promise.reject(error);
+                    let status = response.status;
+
+                    if (status == 403) status = "Access denied to category.";
+                    else if (status >= 500) status = "An error occurred on the server side. Please contact the administrator.";
+                    else status = "An error occurred while getting data from the server."
+
+                    return Promise.reject(status);
                 }
 
+                const responseData = await response.json();
+
                 this.isLoading = false;
-                this.productNames = responseData.data;
+                this.products = responseData;
             })
             .catch(error => {
+                this.data = [];
                 this.error.message = error;
                 this.error.dialog = true;
                 this.error.status = true;
@@ -118,28 +138,34 @@ export default {
         },
         addElement(data) {
             const element = {
-                id: null,
                 quantity: data.quantity,
                 price: data.price,
                 date: data.date,
                 owner: data.owner,
-                product_id: data.product
+                product: data.product
             }
 
-            fetch('http://server.local:5000/addHistory', {
+            fetch(`http://localhost:8080/history/`, {
                 method: 'POST',
+                headers: {
+                    'Content-type': 'application/json',
+                    'Authorization': `Token ${this.$store.getters['user/token']}`
+                },
                 body: JSON.stringify(element)
             })
             .then(async response => {
-                const responseData = await response.json();
-
+                
                 if (!response.ok) {
-                    const error = (responseData && responseData.message) || response.statusText;
+                    const error = response.statusText;
                     return Promise.reject(error);
                 }
 
-                element['id'] = responseData.data;
-                this.data.push(element);
+                const responseData = await response.json();
+
+                element['id'] = responseData['id'];
+                element['product'] = responseData['product'];
+                element['product_name'] = responseData['product_name'];
+                this.data.unshift(element);
                 this.form.success = true;
             })
             .catch(error => {
@@ -147,33 +173,40 @@ export default {
             });
         },
         editElement(data) {
+            const id = data.id;
             const element = {
-                id: data.id,
                 quantity: data.quantity,
                 price: data.price,
                 date: data.date,
                 owner: data.owner,
-                product_id: data.product
+                product: data.product
             }
 
-            fetch('http://server.local:5000/editHistory', {
-                method: 'POST',
+            fetch('http://localhost:8080/history/id/' + id, {
+                method: 'PUT',
+                headers: {
+                    'Content-type': 'application/json',
+                    'Authorization': `Token ${this.$store.getters['user/token']}`
+                },
                 body: JSON.stringify(element)
             })
             .then(async response => {
-                const responseData = await response.json();
-
+                
                 if (!response.ok) {
-                    const error = (responseData && responseData.message) || response.statusText;
+                    const error = response.statusText;
                     return Promise.reject(error);
                 }
+
+                const responseData = await response.json();
+                
                 this.form.success = true;
-                const found = this.data.find(el => el.id === element.id);
-                found.quantity = element.quantity; 
-                found.price = element.price; 
-                found.date = element.date; 
-                found.owner = element.owner; 
-                found.product_id = element.product_id; 
+                const found = this.data.find(el => el.id === id);
+                found.quantity = responseData['quantity']; 
+                found.price = responseData['price'];
+                found.date = responseData['date'];
+                found.owner = responseData['owner'];
+                found.product = responseData['product']; 
+                found.product_name = responseData['product_name']; 
                 this.closeAndResetForm();
             })
             .catch(error => {
@@ -183,7 +216,7 @@ export default {
     },
     created() {
         this.loadHistory();
-        this.loadProductNames();
+        this.loadProducts();
     },
 }
 </script>
