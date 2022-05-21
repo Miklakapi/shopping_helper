@@ -156,9 +156,10 @@ export default {
                 }
                 
                 const responseData = await response.json();
+
                 this.form.success = true;
                 const found = this.data.find(el => el.id === id);
-                found.name = element.name;
+                found.name = responseData['name'];
                 this.closeAndResetForm();
             })
             .catch(error => {
