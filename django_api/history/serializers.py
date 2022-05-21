@@ -4,7 +4,9 @@ from .models import History
 
 class HistorySerializer(serializers.ModelSerializer):
 
-    product_name = serializers.SerializerMethodField(read_only=True)  
+    product_name = serializers.SerializerMethodField(read_only=True)
+    owner = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    owner_name = serializers.SerializerMethodField(read_only=True)  
 
     class Meta:
         model = History
@@ -13,6 +15,7 @@ class HistorySerializer(serializers.ModelSerializer):
             'quantity',
             'price',
             'owner',
+            'owner_name',
             'date',
             'product',
             'product_name'
@@ -20,3 +23,6 @@ class HistorySerializer(serializers.ModelSerializer):
 
     def get_product_name(self, obj):
         return obj.product.name
+
+    def get_owner_name(self, obj):
+        return obj.owner.username
