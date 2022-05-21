@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'expiring_token',
     'shopping_list',
     'category',
+    'product',
     'corsheaders',
 ]
 

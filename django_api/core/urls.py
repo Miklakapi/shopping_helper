@@ -22,4 +22,5 @@ urlpatterns = [
     path('', include('expiring_token.urls')),
     path('shopping-list/', include('shopping_list.urls')),
     path('category/', include('category.urls')),
+    path('product/', include('product.urls')),
 ]
