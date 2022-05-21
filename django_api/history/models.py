@@ -6,7 +6,7 @@ from product.models import Product
 class History(models.Model):
     quantity = models.IntegerField()
     price = models.FloatField()
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField()
     owner = models.CharField(max_length=50)
 
     product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=False)

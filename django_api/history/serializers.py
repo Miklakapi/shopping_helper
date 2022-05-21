@@ -13,6 +13,7 @@ class HistorySerializer(serializers.ModelSerializer):
             'quantity',
             'price',
             'owner',
+            'date',
             'product',
             'product_name'
         ]
