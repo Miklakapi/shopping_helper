@@ -1,24 +1,5 @@
-#!/usr/bin/env python
-
-"""REST API"""
-
-from flask import Flask, request
-from flask_cors import CORS
-import json
-import time
-
-
-app = Flask(__name__)
-CORS(app)
-
 users = [
     {'id': 1, 'user': 'Kacper', 'password': 'password'}
-]
-
-shopping_list = [
-    {'id': 1, 'name': 'milk', 'quantity': 2, 'date': '2022-05-04', 'owner': 'Kacper'},
-    {'id': 2, 'name': 'water', 'quantity': 3, 'date': '2022-05-04', 'owner': 'Kacper'},
-    {'id': 3, 'name': 'bread', 'quantity': 1, 'date': '2022-05-04', 'owner': 'Kacper'}
 ]
 
 categories = [
@@ -40,32 +21,6 @@ history = [
 @app.route('/login', methods=['POST'])
 def login():
     pass
-
-
-################ Shopping List ################
-@app.route('/getShoppingList')
-def getShopppingList():
-    return {'data': shopping_list}
-
-
-@app.route('/addShoppingListElement', methods=['POST'])
-def addShoppingListElement():
-    id = shopping_list[-1]['id'] + 1
-    data = json.loads(request.data)
-    data['id'] = id
-    shopping_list.append(data)
-    return {'data': id}
-
-
-@app.route('/delShoppingListElement', methods=['DELETE'])
-def delShoppingListElement():
-    id = json.loads(request.data)
-    for i in range(len(shopping_list)):
-        if shopping_list[i]['id'] == int(id):
-            del shopping_list[i]
-            return {'status': 'ok'}
-    return 'Record not found', 400
-
 
 ################ Categories ################
 @app.route('/getCategories')
@@ -162,7 +117,3 @@ def editHistory():
             history[i] = {'id': data['id'], 'quantity': data['quantity'], 'price': data['price'], 'date': data['date'], 'owner': data['owner'], 'product_id': data['product_id']}
             return {'status': 'ok'}
     return 'Record not found', 400
-
-
-if __name__ == '__main__':
-    app.run('0.0.0.0', debug=True)
