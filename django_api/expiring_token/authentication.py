@@ -6,7 +6,6 @@ from django.utils import timezone
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.exceptions import AuthenticationFailed
 
-
 from .models import ExpiringToken
 from .settings import custom_settings
 
