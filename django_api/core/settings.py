@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'shopping_list',
     'category',
     'product',
+    'history',
     'corsheaders',
 ]
 
