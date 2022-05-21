@@ -13,7 +13,7 @@
                     <td scope="row">{{ element.name }}</td>
                     <td>{{ element.quantity }}</td>
                     <td>{{ element.date }}</td>
-                    <td>{{ element.owner }}</td>
+                    <td>{{ element.owner_name }}</td>
                     <td class="col-1">
                         <div class="confirm" @click="deleteElement(element.id)">
                             <check-sign></check-sign>

@@ -94,11 +94,8 @@ export default {
         },
         addElement(data) {
             const element = {
-                id: null,
                 name: data.product,
                 quantity: data.quantity,
-                owner: data.owner,
-                date: null
             }
 
             fetch(`http://localhost:8080/shopping-list/`, {
@@ -120,6 +117,7 @@ export default {
 
                 element['id'] = responseData['id'];
                 element['date'] = responseData['date'];
+                element['owner_name'] = responseData['owner_name'];
                 this.data.unshift(element);
                 this.form.success = true;
             })
