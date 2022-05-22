@@ -1,16 +1,16 @@
 <template>
     <section>
         <h1>Dashboard</h1>
-        <section v-if="!isLoading"><box><spinner></spinner></box></section>
+        <section v-if="isLoading"><box><spinner></spinner></box></section>
         <section v-else>
             <section v-if="error.status"><box><error-data></error-data></box></section>
             <section v-else>
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-3"><mini-box class="one"><template v-slot:head>Total spend</template>2256.34 $</mini-box></div>
-                        <div class="col-3"><mini-box class="two"><template v-slot:head>Last 12 months</template>1656.34 $</mini-box></div>
-                        <div class="col-3"><mini-box class="three"><template v-slot:head>Last 4 weeks</template>300.21 $</mini-box></div>
-                        <div class="col-3"><mini-box class="four"><template v-slot:head>Last 7 days</template>78.27 $</mini-box></div>
+                        <div class="col-3"><mini-box class="one"><template v-slot:head>Total spend</template>{{ headData['total'] }} $</mini-box></div>
+                        <div class="col-3"><mini-box class="two"><template v-slot:head>Last 12 months</template>{{ headData['months'] }} $</mini-box></div>
+                        <div class="col-3"><mini-box class="three"><template v-slot:head>Last 4 weeks</template>{{ headData['weeks'] }} $</mini-box></div>
+                        <div class="col-3"><mini-box class="four"><template v-slot:head>Last 7 days</template>{{ headData['days'] }} $</mini-box></div>
                     </div>
                 </div>
                 <box-with-title @click="periodicExpenses">
@@ -36,6 +36,7 @@ export default {
             error: {
                 status: false
             },
+            headData: null
         };
     },
     components: {
@@ -43,10 +44,37 @@ export default {
     },
     methods: {
         periodicExpenses() {
-            console.log(1);
+
         },
         loadHeaders() {
+            fetch('http://localhost:8080/dashboard/spends', {
+                headers: {
+                    'Authorization': `Token ${this.$store.getters['user/token']}`
+                }
+            })
+            .then(async response => {
+                
+                if (!response.ok) {
+                    let status = response.status;
 
+                    if (status == 403) status = "Access denied.";
+                    else if (status >= 500) status = "An error occurred on the server side. Please contact the administrator.";
+                    else status = "An error occurred while getting data from the server."
+
+                    return Promise.reject(status);
+                }
+                
+                const responseData = await response.json();
+
+                this.isLoading = false;
+                this.headData = responseData;
+            })
+            .catch(error => {
+                this.error.message = error;
+                this.error.dialog = true;
+                this.error.status = true;
+                this.isLoading = false;
+            });
         },
         loadMonthlyExpenses() {
 
@@ -55,10 +83,10 @@ export default {
 
         }
     },
-    create() {
-        loadHeaders();
-        loadMonthlyExpenses();
-        loadWeeklyExpenses();
+    created() {
+        this.loadHeaders();
+        this.loadMonthlyExpenses();
+        this.loadWeeklyExpenses();
     }
 }
 </script>
