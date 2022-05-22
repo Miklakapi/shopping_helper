@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'category',
     'product',
     'history',
+    'dashboard',
     'corsheaders',
 ]
 
