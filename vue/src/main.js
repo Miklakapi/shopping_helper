@@ -11,6 +11,7 @@ import Spinner from './components/Spinner.vue';
 import ErrorDialog from './components/ErrorDialog.vue';
 import ErrorData from './components/ErrorData.vue';
 import DataTable from './components/DataTable.vue';
+import { BIconChevronRight, BIconChevronLeft } from 'bootstrap-icons-vue';
 
 const app = createApp(App);
 
@@ -29,6 +30,8 @@ app.component('spinner', Spinner);
 app.component('errorDialog', ErrorDialog);
 app.component('errorData', ErrorData);
 app.component('dataTable', DataTable);
+app.component('nextArrow', BIconChevronRight);
+app.component('previousArrow', BIconChevronLeft);
 
 router.isReady().then(function() {
     app.mount('#app');

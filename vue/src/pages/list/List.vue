@@ -14,12 +14,13 @@
             <spinner v-if="isLoading"></spinner>
             <span v-else>
                 <error-data v-if="error.status"></error-data>
-                <list-table 
-                    v-else 
-                    :data="data" 
-                    @add="add" 
-                    @delete="deleteElement">
-                </list-table>
+                <section v-else>
+                    <list-table :data="data" @add="add" @delete="deleteElement"></list-table>
+                    <div class="arrows">
+                        <previous-arrow class="arrow-left" @click="toPreviousPage"></previous-arrow>
+                        <next-arrow class="arrow-right" @click="toNextPage"></next-arrow>
+                    </div>
+                </section>
             </span>
         </box> 
     </section>
@@ -43,7 +44,9 @@ export default {
                 status: false
             },
             isLoading: true,
-            data: []
+            data: [],
+            nextPage: null,
+            previousPage: null
         };
     },
     components: {
@@ -62,8 +65,18 @@ export default {
             this.form.error = false;
             this.form.success = false;
         },
-        loadList() {
-            fetch('http://localhost:8080/shopping-list/', {
+        toPreviousPage() {
+            if (this.previousPage) {
+                this.loadList(this.previousPage);
+            }
+        },
+        toNextPage() {
+            if (this.nextPage) {
+                this.loadList(this.nextPage);
+            }
+        },
+        loadList(link = 'http://localhost:8080/shopping-list/') {
+            fetch(link, {
                 headers: {
                     'Authorization': `Token ${this.$store.getters['user/token']}`
                 }
@@ -83,7 +96,9 @@ export default {
                 const responseData = await response.json();
 
                 this.isLoading = false;
-                this.data = responseData;
+                this.data = responseData["results"];
+                this.nextPage = responseData["next"];
+                this.previousPage = responseData["previous"];
             })
             .catch(error => {
                 this.error.message = error;
@@ -165,6 +180,28 @@ section {
     h1 {
         text-align: center;
         margin-bottom: 15px;
+    }
+
+    .arrows {
+        font-size: 1.5rem;
+        display: flex;
+        justify-content: center;
+
+        .arrow-left {
+            margin-right: 30px;
+            
+            &:hover {
+                color: #3c8dbc;
+            }
+        }
+
+        .arrow-right {
+            margin-left: 30px;
+
+            &:hover {
+                color: #3c8dbc;
+            }
+        }
     }
 }
 </style>
