@@ -18,3 +18,4 @@ class ProductBaseListAPIView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductBaseSerializer
     looup_field = 'pk'
+    pagination_class = None
