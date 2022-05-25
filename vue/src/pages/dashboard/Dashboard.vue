@@ -17,10 +17,6 @@
                     <template v-slot:head>Monthly expenses for the last 12 months</template>
                     TO DO
                 </box-with-title>
-                <box-with-title @click="periodicExpenses">
-                    <template v-slot:head>Weekly expenses for the last 12 weeks</template>
-                    TO DO
-                </box-with-title>
             </section>
         </section>
     </section>

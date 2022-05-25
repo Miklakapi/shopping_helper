@@ -60,20 +60,4 @@ export default {
         background-color: darken(#198754, 5%);
     }
 }
-
-@keyframes table-list-animation {
-    0% {
-        opacity: 1;
-        transform: translateX(0);
-    }
-
-    100% {
-        opacity: 0;
-        transform: translateX(30px);
-    }
-}
-
-.table-list-leave-active {
-    animation: table-list-animation 0.6s ease-in;
-}
 </style>

@@ -46,6 +46,7 @@ export default {
             isLoading: true,
             data: [],
             nextPage: null,
+            thisPage: null,
             previousPage: null
         };
     },
@@ -76,6 +77,7 @@ export default {
             }
         },
         loadList(link = 'http://localhost:8080/shopping-list/') {
+            this.thisPage = link;
             fetch(link, {
                 headers: {
                     'Authorization': `Token ${this.$store.getters['user/token']}`
@@ -133,7 +135,15 @@ export default {
                 element['id'] = responseData['id'];
                 element['date'] = responseData['date'];
                 element['owner_name'] = responseData['owner_name'];
-                this.data.unshift(element);
+                if (!this.previousPage) {
+                    this.data.unshift(element);
+                }
+                if (this.data.length > 15) {
+                    this.data.pop();
+                    if (!this.nextPage) {
+                        this.loadList(this.thisPage);
+                    }
+                }
                 this.form.success = true;
             })
             .catch(error => {
@@ -162,6 +172,13 @@ export default {
                     this.data.splice(this.data.findIndex(function(i){
                         return i.id === id;
                     }), 1);
+
+                    if (this.data.length == 14) {
+                        this.loadList(this.thisPage);
+                    }
+                    else if (!this.data.length && this.previousPage) {
+                        this.loadList(this.previousPage);
+                    }
                 })
                 .catch(error => {
                     this.error.message = error;

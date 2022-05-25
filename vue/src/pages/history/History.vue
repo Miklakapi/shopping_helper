@@ -53,6 +53,7 @@ export default {
             products: [],
             editData: null,
             nextPage: null,
+            thisPage: null,
             previousPage: null
         };
     },
@@ -89,6 +90,7 @@ export default {
             }
         },
         loadHistory(link = 'http://localhost:8080/history/') {
+            this.thisPage = link;
             fetch(link, {
                 headers: {
                     'Authorization': `Token ${this.$store.getters['user/token']}`
@@ -180,7 +182,15 @@ export default {
                 element['product'] = responseData['product'];
                 element['product_name'] = responseData['product_name'];
                 element['owner_name'] = responseData['owner_name'];
-                this.data.unshift(element);
+                if (!this.previousPage) {
+                    this.data.unshift(element);
+                }
+                if (this.data.length > 15) {
+                    this.data.pop();
+                    if (!this.nextPage) {
+                        this.loadHistory(this.thisPage);
+                    }
+                }
                 this.form.success = true;
             })
             .catch(error => {

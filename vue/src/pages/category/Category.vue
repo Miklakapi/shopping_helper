@@ -51,6 +51,7 @@ export default {
             data: [],
             editData: null,
             nextPage: null,
+            thisPage: null,
             previousPage: null
         };
     },
@@ -87,6 +88,7 @@ export default {
             }
         },
         loadCategory(link = 'http://localhost:8080/category/') {
+            this.thisPage = link;
             fetch(link, {
                 headers: {
                     'Authorization': `Token ${this.$store.getters['user/token']}`
@@ -142,7 +144,11 @@ export default {
                 const responseData = await response.json();
 
                 element['id'] = responseData['id'];
-                this.data.push(element);
+                if (this.data.length < 15) {
+                    this.data.push(element);
+                } else if (!this.nextPage) {
+                    this.loadCategory(this.thisPage);
+                }
                 this.form.success = true;
             })
             .catch(error => {

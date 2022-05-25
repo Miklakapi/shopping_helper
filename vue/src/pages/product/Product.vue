@@ -53,6 +53,7 @@ export default {
             categories: [],
             editData: null,
             nextPage: null,
+            thisPage: null,
             previousPage: null
         };
     },
@@ -89,6 +90,7 @@ export default {
             }
         },
         loadProducts(link = 'http://localhost:8080/product/') {
+            this.thisPage = link;
             fetch(link, {
                 headers: {
                     'Authorization': `Token ${this.$store.getters['user/token']}`
@@ -177,7 +179,11 @@ export default {
                 element['id'] = responseData['id'];
                 element['category'] = responseData['category'];
                 element['category_name'] = responseData['category_name'];
-                this.data.push(element);
+                if (this.data.length < 15) {
+                    this.data.push(element);
+                } else if (!this.nextPage) {
+                    this.loadProducts(this.thisPage);
+                }
                 this.form.success = true;
             })
             .catch(error => {
