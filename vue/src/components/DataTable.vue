@@ -1,19 +1,21 @@
 <template>
-    <div class="add" @click="add">
-        <circle-add></circle-add>
-    </div>
-    <table class="table nowrap">
-        <thead>
-            <tr>
-                <slot name="head"></slot>
-            </tr>
-        </thead>
-        <slot name="tbody">
-            <tbody>
-                <slot></slot>
-            </tbody>
-        </slot>
-    </table>
+    <section>
+        <div class="add" @click="add">
+            <circle-add></circle-add>
+        </div>
+        <table class="table nowrap">
+            <thead>
+                <tr>
+                    <slot name="head"></slot>
+                </tr>
+            </thead>
+            <slot name="tbody">
+                <tbody>
+                    <slot></slot>
+                </tbody>
+            </slot>
+        </table>
+    </section>
 </template>
 
 <script>
