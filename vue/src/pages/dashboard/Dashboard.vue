@@ -15,7 +15,7 @@
                 </div>
                 <box-with-title @click="periodicExpenses">
                     <template v-slot:head>Monthly expenses for the last 12 months</template>
-                    TO DO
+                    <chart :data="monthChartData"></chart>
                 </box-with-title>
             </section>
         </section>
@@ -24,6 +24,7 @@
 
 <script>
 import MiniBox from '../../components/MiniBox.vue';
+import Chart from './Chart.vue';
 
 export default {
     data() {
@@ -32,11 +33,26 @@ export default {
             error: {
                 status: false
             },
-            headData: null
+            headData: {
+                total: 0,
+                months: 0,
+                weeks: 0,
+                days: 0
+            },
+            monthChartData: {
+                labels: [],
+                datasets: [
+                    { 
+                        data: [],
+                        label: 'Spends',
+                    }
+                ]
+            }
         };
     },
     components: {
-        'miniBox': MiniBox
+        'miniBox': MiniBox,
+        'chart': Chart
     },
     methods: {
         periodicExpenses() {
@@ -62,7 +78,6 @@ export default {
                 
                 const responseData = await response.json();
 
-                this.isLoading = false;
                 this.headData = responseData;
             })
             .catch(error => {
@@ -72,17 +87,45 @@ export default {
                 this.isLoading = false;
             });
         },
-        loadMonthlyExpenses() {
+        loadSpendsByMonthChart() {
+            fetch('http://localhost:8080/dashboard/spends-by-month-chart', {
+                headers: {
+                    'Authorization': `Token ${this.$store.getters['user/token']}`
+                }
+            })
+            .then(async response => {
+                
+                if (!response.ok) {
+                    let status = response.status;
 
-        },
-        loadWeeklyExpenses() {
+                    if (status == 403) status = "Access denied.";
+                    else if (status >= 500) status = "An error occurred on the server side. Please contact the administrator.";
+                    else status = "An error occurred while getting data from the server."
 
+                    return Promise.reject(status);
+                }
+                
+                const responseData = await response.json();
+
+                responseData.forEach(element => {
+                    this.monthChartData['labels'].push(element['month']);
+                    this.monthChartData['datasets'][0]["data"].push(element['spends']);
+                });
+
+                this.isLoading = false;
+            })
+            .catch(error => {
+                console.log(error);
+                this.error.message = error;
+                this.error.dialog = true;
+                this.error.status = true;
+                this.isLoading = false;
+            });
         }
     },
     created() {
         this.loadHeaders();
-        this.loadMonthlyExpenses();
-        this.loadWeeklyExpenses();
+        this.loadSpendsByMonthChart();
     }
 }
 </script>
