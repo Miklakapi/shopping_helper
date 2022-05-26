@@ -9,3 +9,8 @@ class SpendsSerializer(serializers.Serializer):
     months = serializers.FloatField()
     weeks = serializers.FloatField()
     days = serializers.FloatField()
+
+
+class SpendsByMonthChartSerializer(serializers.Serializer):
+    month = serializers.CharField()
+    spends = serializers.FloatField()
