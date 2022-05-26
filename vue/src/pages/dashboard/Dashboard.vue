@@ -44,7 +44,20 @@ export default {
                 datasets: [
                     { 
                         data: [],
-                        label: 'Spends',
+                        backgroundColor: [
+                            '#723e3c',
+                            '#725f31',
+                            '#5d628e',
+                            '#5733cb',
+                            '#7a1d1d',
+                            '#b449bd',
+                            '#b1483e',
+                            '#32863d',
+                            '#6772e4',
+                            '#d1571a',
+                            '#e36754',
+                            '#d3c432',
+                        ]
                     }
                 ]
             }
