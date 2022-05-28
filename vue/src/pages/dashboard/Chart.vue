@@ -3,6 +3,10 @@
         :chart-data="data"
         :chart-options="options"
         :height="300"
+        :style="{
+            height: '300px',
+            width: '99%'
+        }"
     ></bar>
 </template>
 

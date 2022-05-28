@@ -128,7 +128,6 @@ export default {
                 this.isLoading = false;
             })
             .catch(error => {
-                console.log(error);
                 this.error.message = error;
                 this.error.dialog = true;
                 this.error.status = true;
