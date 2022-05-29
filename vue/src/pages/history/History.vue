@@ -18,7 +18,7 @@
             <spinner v-if="isLoading"></spinner>
             <span v-else>
                 <error-data v-if="error.status"></error-data>
-                <section v-else >
+                <section v-else>
                     <history-table :data="data" @add="add" @edit="edit"></history-table>
                     <div class="arrows">
                         <previous-arrow class="arrow-left" @click="toPreviousPage"></previous-arrow>

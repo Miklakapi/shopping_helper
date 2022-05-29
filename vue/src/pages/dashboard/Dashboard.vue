@@ -13,7 +13,7 @@
                         <div class="col-3"><mini-box class="four"><template v-slot:head>Last 7 days</template>{{ headData['days'] }} $</mini-box></div>
                     </div>
                 </div>
-                <box-with-title @click="periodicExpenses">
+                <box-with-title @click="monthSpends">
                     <template v-slot:head>Monthly expenses for the last 12 months</template>
                     <chart :data="monthChartData"></chart>
                 </box-with-title>
@@ -68,8 +68,8 @@ export default {
         'chart': Chart
     },
     methods: {
-        periodicExpenses() {
-
+        monthSpends() {
+            this.$router.push({ name: 'monthSpends' });
         },
         loadHeaders() {
             fetch('http://localhost:8080/dashboard/spends', {
