@@ -4,9 +4,10 @@ import calendar
 from rest_framework import generics
 from django.db.models import Sum
 from rest_framework.response import Response
+from django.urls import reverse
 
 from history.models import History
-from .serializers import SpendsSerializer, SpendsByMonthChartSerializer
+from .serializers import SpendsSerializer, SpendsByMonthChartSerializer, SpendsByMonthTableSerializer
 
 
 class SpendsListAPIView(generics.ListAPIView):
@@ -75,6 +76,37 @@ class SpendsByMonthChartListAPIVIew(generics.ListAPIView):
         data.reverse()
 
         serializer = SpendsByMonthChartSerializer(data, many=True)
+        return Response(serializer.data)
+
+
+class SpendsByMonthTableListAPIVIew(generics.ListAPIView):
+    queryset = History.objects.all()
+
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super().get_queryset(*args, **kwargs)
+        return qs.filter(owner=self.request.user)
+
+
+    def list(self, request, year=datetime.datetime.now().year, *args, **kwargs):
+        qs = self.get_queryset()
+        result = []
+
+        for x in range(12):
+            queryset = qs.filter(date__year=str(year), date__month=str(x))
+            spends = queryset.aggregate(sum=Sum('price'))
+            result.append({"month": get_month_name(x), 'spends': spends['sum']})
+
+        path = request.build_absolute_uri(reverse('month-table'))
+
+        data = {
+            'year': year, 
+            'next': path + '/' + str(year + 1),
+            'previous': path + '/' + str(year - 1),
+            "result": result
+        }
+
+        serializer = SpendsByMonthTableSerializer(data)
         return Response(serializer.data)
 
 
