@@ -73,12 +73,7 @@ export default {
                 dialog: null,
                 message: null
             },
-            headData: {
-                total: 0,
-                months: 0,
-                weeks: 0,
-                days: 0
-            },
+            headData: null,
             monthChartData: {
                 labels: [],
                 datasets: [
@@ -176,7 +171,7 @@ export default {
             });
         },
         loadCategorySpends() {
-            fetch('http://localhost:8080/dashboard/spends-by-category', {
+            fetch('http://localhost:8080/dashboard/spends-by-category-chart', {
                 headers: {
                     'Authorization': `Token ${this.$store.getters['user/token']}`
                 }
@@ -208,7 +203,7 @@ export default {
             });
         },
         loadProductSpends() {
-            fetch('http://localhost:8080/dashboard/spends-by-product', {
+            fetch('http://localhost:8080/dashboard/spends-by-product-chart', {
                 headers: {
                     'Authorization': `Token ${this.$store.getters['user/token']}`
                 }

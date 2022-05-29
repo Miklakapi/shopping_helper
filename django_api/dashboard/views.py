@@ -1,6 +1,5 @@
 import datetime
 import calendar
-from unicodedata import category
 
 from rest_framework import generics
 from django.db.models import Sum
@@ -31,20 +30,23 @@ class SpendsListAPIView(generics.ListAPIView):
         data['weeks'] = self.get_data_by_time(qs, today_date, 28)
         data['days'] = self.get_data_by_time(qs, today_date, 7)
 
-        serializer = SpendsSerializer(data=data)
-        if serializer.is_valid():
-            return Response(serializer.data)
+        serializer = SpendsSerializer(data)
+        return Response(serializer.data)
 
 
     def get_data_by_time(self, queryset, today_date, delta):
         if delta == -1:
             data = queryset.aggregate(sum=Sum('price'))
+            if data['sum'] == None: 
+                return 0
             return round(data['sum'], 2)
         data = None
         start_date = today_date - datetime.timedelta(days=delta)
         queryset = queryset.filter(date__range=(start_date, today_date))
 
         data = queryset.aggregate(sum=Sum('price'))
+        if data['sum'] == None: 
+            return 0
         return round(data['sum'], 2)
 
 
