@@ -191,7 +191,7 @@ export default {
                 const responseData = await response.json();
 
                 responseData.forEach(element => {
-                    this.categoryChartData['labels'].push(element['month']);
+                    this.categoryChartData['labels'].push(element['category_name']);
                     this.categoryChartData['datasets'][0]["data"].push(element['spends']);
                 });
 
@@ -223,7 +223,7 @@ export default {
                 const responseData = await response.json();
 
                 responseData.forEach(element => {
-                    this.productChartData['labels'].push(element['month']);
+                    this.productChartData['labels'].push(element['product_name']);
                     this.productChartData['datasets'][0]["data"].push(element['spends']);
                 });
 
