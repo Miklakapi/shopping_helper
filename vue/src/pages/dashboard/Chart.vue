@@ -2,9 +2,9 @@
     <bar
         :chart-data="data"
         :chart-options="options"
-        :height="300"
+        :height="250"
         :style="{
-            height: '300px',
+            height: '250px',
             width: '99%'
         }"
     ></bar>
