@@ -1,8 +1,4 @@
-from itertools import product
-from django.db.models import Sum
 from rest_framework import serializers
-
-from history.models import History
 
 
 class SpendsSerializer(serializers.Serializer):
