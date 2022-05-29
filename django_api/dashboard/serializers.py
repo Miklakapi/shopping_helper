@@ -1,3 +1,4 @@
+from itertools import product
 from django.db.models import Sum
 from rest_framework import serializers
 
@@ -15,8 +16,19 @@ class SpendsByMonthChartSerializer(serializers.Serializer):
     month = serializers.CharField()
     spends = serializers.FloatField()
 
+
 class SpendsByMonthTableSerializer(serializers.Serializer):
     year = serializers.IntegerField()
     next = serializers.CharField()
     previous = serializers.CharField()
     results = serializers.ListField(child=SpendsByMonthChartSerializer())
+
+
+class SpendsByCategoryChartSerializer(serializers.Serializer):
+    category_name = serializers.CharField()
+    spends = serializers.FloatField()
+
+
+class SpendsByProductChartSerializer(serializers.Serializer):
+    product_name = serializers.CharField()
+    spends = serializers.FloatField()

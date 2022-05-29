@@ -1,13 +1,15 @@
 import datetime
 import calendar
+from unicodedata import category
 
 from rest_framework import generics
 from django.db.models import Sum
 from rest_framework.response import Response
 from django.urls import reverse
+from django.db.models import F
 
 from history.models import History
-from .serializers import SpendsSerializer, SpendsByMonthChartSerializer, SpendsByMonthTableSerializer
+from .serializers import SpendsSerializer, SpendsByMonthChartSerializer, SpendsByMonthTableSerializer, SpendsByCategoryChartSerializer, SpendsByProductChartSerializer
 
 
 class SpendsListAPIView(generics.ListAPIView):
@@ -109,6 +111,42 @@ class SpendsByMonthTableListAPIVIew(generics.ListAPIView):
         }
 
         serializer = SpendsByMonthTableSerializer(data)
+        return Response(serializer.data)
+
+
+class SpendsByCategoryChartListAPIVIew(generics.ListAPIView):
+    queryset = History.objects.all()
+
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super().get_queryset(*args, **kwargs)
+        return qs.filter(owner=self.request.user)
+
+
+    def list(self, *args, **kwargs):
+        qs = self.get_queryset()
+
+        qs = qs.values(category_name=F('product__category__name')).annotate(spends=Sum('price')).order_by('-spends')
+
+        serializer = SpendsByCategoryChartSerializer(qs, many=True)
+        return Response(serializer.data)
+
+
+class SpendsByProductChartListAPIVIew(generics.ListAPIView):
+    queryset = History.objects.all()
+
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super().get_queryset(*args, **kwargs)
+        return qs.filter(owner=self.request.user)
+
+
+    def list(self, *args, **kwargs):
+        qs = self.get_queryset()
+
+        qs = qs.values(product_name=F('product__name')).annotate(spends=Sum('price')).order_by('-spends')
+
+        serializer = SpendsByProductChartSerializer(qs, many=True)
         return Response(serializer.data)
 
 
