@@ -7,8 +7,20 @@
             <span v-else>
                 <error-data v-if="error.status"></error-data>
                 <section v-else>
+                    <data-table>
+                        <template v-slot:add><div></div></template>
+                        <template v-slot:head>
+                            <th>Month</th>
+                            <th>Spends</th>
+                        </template>
+                        <tr v-for="element in data" :key="element.month">
+                            <td scope="row">{{ element.month }}</td>
+                            <td>{{ element.spends }} $</td>
+                        </tr>
+                    </data-table>
                     <div class="arrows">
                         <previous-arrow class="arrow-left" @click="toPreviousPage"></previous-arrow>
+                        <h4>{{ year }}</h4>
                         <next-arrow class="arrow-right" @click="toNextPage"></next-arrow>
                     </div>
                 </section>
@@ -28,6 +40,7 @@ export default {
                 status: false
             },
             data: [],
+            year: null,
             nextPage: null,
             thisPage: null,
             previousPage: null
@@ -50,7 +63,7 @@ export default {
                 this.loadData(this.nextPage);
             }
         },
-        loadData(link = 'http://localhost:8080/history/') {
+        loadData(link = 'http://localhost:8080/dashboard/spends-by-month-table') {
             this.thisPage = link;
             fetch(link, {
                 headers: {
@@ -71,10 +84,11 @@ export default {
 
                 const responseData = await response.json();
 
-                this.isLoading = false;
                 this.data = responseData["results"];
                 this.nextPage = responseData["next"];
                 this.previousPage = responseData["previous"];
+                this.year = responseData["year"];
+                this.isLoading = false;
             })
             .catch(error => {
                 this.error.message = error;

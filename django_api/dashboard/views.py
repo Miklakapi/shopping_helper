@@ -92,9 +92,11 @@ class SpendsByMonthTableListAPIVIew(generics.ListAPIView):
         qs = self.get_queryset()
         result = []
 
-        for x in range(12):
+        for x in range(1, 13):
             queryset = qs.filter(date__year=str(year), date__month=str(x))
             spends = queryset.aggregate(sum=Sum('price'))
+            if spends['sum'] == None:
+                spends['sum'] = 0
             result.append({"month": get_month_name(x), 'spends': spends['sum']})
 
         path = request.build_absolute_uri(reverse('month-table'))
@@ -103,7 +105,7 @@ class SpendsByMonthTableListAPIVIew(generics.ListAPIView):
             'year': year, 
             'next': path + '/' + str(year + 1),
             'previous': path + '/' + str(year - 1),
-            "result": result
+            "results": result
         }
 
         serializer = SpendsByMonthTableSerializer(data)

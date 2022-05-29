@@ -19,4 +19,4 @@ class SpendsByMonthTableSerializer(serializers.Serializer):
     year = serializers.IntegerField()
     next = serializers.CharField()
     previous = serializers.CharField()
-    result = serializers.ListField(child=SpendsByMonthChartSerializer())
+    results = serializers.ListField(child=SpendsByMonthChartSerializer())

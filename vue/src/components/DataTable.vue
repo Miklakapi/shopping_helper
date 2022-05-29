@@ -1,8 +1,10 @@
 <template>
     <section>
-        <div class="add" @click="add">
-            <circle-add></circle-add>
-        </div>
+        <slot name="add">
+            <div class="add" @click="add">
+                <circle-add></circle-add>
+            </div>
+        </slot>
         <table class="table nowrap">
             <thead>
                 <tr>
