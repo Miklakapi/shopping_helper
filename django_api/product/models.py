@@ -4,7 +4,7 @@ from category.models import Category
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=False)
 
     class Meta:
