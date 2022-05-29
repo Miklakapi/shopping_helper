@@ -130,7 +130,7 @@ class SpendsByCategoryChartListAPIVIew(generics.ListAPIView):
 
         qs = qs.values(category_name=F('product__category__name')).annotate(spends=Sum('price')).order_by('-spends')
 
-        serializer = SpendsByCategoryChartSerializer(qs, many=True)
+        serializer = SpendsByCategoryChartSerializer(qs[:12], many=True)
         return Response(serializer.data)
 
 
@@ -148,7 +148,7 @@ class SpendsByProductChartListAPIVIew(generics.ListAPIView):
 
         qs = qs.values(product_name=F('product__name')).annotate(spends=Sum('price')).order_by('-spends')
 
-        serializer = SpendsByProductChartSerializer(qs, many=True)
+        serializer = SpendsByProductChartSerializer(qs[:12], many=True)
         return Response(serializer.data)
 
 

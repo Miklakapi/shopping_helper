@@ -191,8 +191,8 @@ export default {
                 const responseData = await response.json();
 
                 responseData.forEach(element => {
-                    this.categoryChartData['labels'].push(element['category_name']);
-                    this.categoryChartData['datasets'][0]["data"].push(element['spends']);
+                    this.categoryChartData['labels'].unshift(element['category_name']);
+                    this.categoryChartData['datasets'][0]["data"].unshift(element['spends']);
                 });
 
                 this.isLoadingCategoryChart = false;
@@ -223,8 +223,8 @@ export default {
                 const responseData = await response.json();
 
                 responseData.forEach(element => {
-                    this.productChartData['labels'].push(element['product_name']);
-                    this.productChartData['datasets'][0]["data"].push(element['spends']);
+                    this.productChartData['labels'].unshift(element['product_name']);
+                    this.productChartData['datasets'][0]["data"].unshift(element['spends']);
                 });
 
                 this.isLoadingProductChart = false;
