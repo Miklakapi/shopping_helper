@@ -1,7 +1,7 @@
 <template>
     <section>
         <error-dialog v-if="error.dialog" @close="error.dialog=false"><template v-slot:default>{{ error.message }}</template></error-dialog>
-        <h1>Category spends</h1>
+        <h1>Product spends</h1>
         <box>
             <spinner v-if="isLoading"></spinner>
             <span v-else>
@@ -10,7 +10,7 @@
                     <data-table>
                         <template v-slot:add><div></div></template>
                         <template v-slot:head>
-                            <th>Category</th>
+                            <th>Product</th>
                             <th>Spends</th>
                         </template>
                         <tr v-for="element in data" :key="element.product_name">
