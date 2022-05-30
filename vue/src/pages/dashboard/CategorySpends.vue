@@ -1,7 +1,7 @@
 <template>
     <section>
         <error-dialog v-if="error.dialog" @close="error.dialog=false"><template v-slot:default>{{ error.message }}</template></error-dialog>
-        <h1>Month spends</h1>
+        <h1>Category spends</h1>
         <box>
             <spinner v-if="isLoading"></spinner>
             <span v-else>
@@ -10,17 +10,16 @@
                     <data-table>
                         <template v-slot:add><div></div></template>
                         <template v-slot:head>
-                            <th>Month</th>
+                            <th>Category</th>
                             <th>Spends</th>
                         </template>
-                        <tr v-for="element in data" :key="element.month">
-                            <td scope="row">{{ element.month }}</td>
+                        <tr v-for="element in data" :key="element.category_name">
+                            <td scope="row">{{ element.category_name }}</td>
                             <td>{{ element.spends }} $</td>
                         </tr>
                     </data-table>
                     <div class="arrows">
                         <previous-arrow class="arrow-left" @click="toPreviousPage"></previous-arrow>
-                        <h4>{{ year }}</h4>
                         <next-arrow class="arrow-right" @click="toNextPage"></next-arrow>
                     </div>
                 </section>
@@ -40,7 +39,6 @@ export default {
                 status: false
             },
             data: [],
-            year: null,
             nextPage: null,
             thisPage: null,
             previousPage: null
@@ -57,7 +55,7 @@ export default {
                 this.loadData(this.nextPage);
             }
         },
-        loadData(link = 'http://localhost:8080/dashboard/spends-by-month-table') {
+        loadData(link = 'http://localhost:8080/dashboard/spends-by-category-table') {
             this.thisPage = link;
             fetch(link, {
                 headers: {
@@ -81,7 +79,6 @@ export default {
                 this.data = responseData["results"];
                 this.nextPage = responseData["next"];
                 this.previousPage = responseData["previous"];
-                this.year = responseData["year"];
                 this.isLoading = false;
             })
             .catch(error => {

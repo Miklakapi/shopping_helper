@@ -49,7 +49,7 @@
                         <chart v-else :data="monthChartData"></chart>
                     </section>
                 </box-with-title>
-                <box-with-title>
+                <box-with-title @click="categorySpends" class="pointer">
                     <template v-slot:head>Annual expenses by category</template>
                     <section v-if="errorPlace.categoryChart"><box><error-data></error-data></box></section>
                     <section v-else>
@@ -57,7 +57,7 @@
                         <chart v-else :data="categoryChartData"></chart>
                     </section>
                 </box-with-title>
-                <box-with-title>
+                <box-with-title @click="productSpends" class="pointer">
                     <template v-slot:head>Annual expenses by product</template>
                     <section v-if="errorPlace.productChart"><box><error-data></error-data></box></section>
                     <section v-else>
@@ -127,6 +127,12 @@ export default {
         },
         monthSpends() {
             this.$router.push({ name: 'monthSpends' });
+        },
+        productSpends() {
+            this.$router.push({ name: 'productSpends' });
+        },
+        categorySpends() {
+            this.$router.push({ name: 'categorySpends' });
         },
         loadHeaders() {
             fetch('http://localhost:8080/dashboard/spends', {
