@@ -9,48 +9,61 @@
                     <div class="row">
                         <div class="col-3">
                             <mini-box class="one mini-box">
+                                <section v-if="errorPlace.spends"><error-data></error-data></section>
                                 <template v-if="!isLoadingHeaders" v-slot:head>Total spend</template>
-                                <spinner v-if="isLoadingHeaders"></spinner>
-                                <section v-else class="box-data">{{ headData['total'] }} $</section>
+                                <spinner v-if="isLoadingHeaders && !errorPlace.spends"></spinner>
+                                <section v-else-if="!errorPlace.spends" class="box-data">{{ headData['total'] }} $</section>
                             </mini-box>
                         </div>
                         <div class="col-3">
                             <mini-box class="two mini-box">
+                                <section v-if="errorPlace.spends"><error-data></error-data></section>
                                 <template v-if="!isLoadingHeaders" v-slot:head>Last 12 months</template>
-                                <spinner v-if="isLoadingHeaders"></spinner>
-                                <section v-else class="box-data">{{ headData['months'] }} $</section>
+                                <spinner v-if="isLoadingHeaders && !errorPlace.spends"></spinner>
+                                <section v-else-if="!errorPlace.spends" class="box-data">{{ headData['months'] }} $</section>
                             </mini-box>
                         </div>
                         <div class="col-3">
                             <mini-box class="three mini-box">
+                                <section v-if="errorPlace.spends"><error-data></error-data></section>
                                 <template v-if="!isLoadingHeaders" v-slot:head>Last 4 weeks</template>
-                                <spinner v-if="isLoadingHeaders"></spinner>
-                                <section v-else class="box-data">{{ headData['weeks'] }} $</section>
+                                <spinner v-if="isLoadingHeaders && !errorPlace.spends"></spinner>
+                                <section v-else-if="!errorPlace.spends" class="box-data">{{ headData['weeks'] }} $</section>
                             </mini-box>
                         </div>
                         <div class="col-3">
                             <mini-box class="four mini-box">
+                                <section v-if="errorPlace.spends"><error-data></error-data></section>
                                 <template v-if="!isLoadingHeaders" v-slot:head>Last 7 days</template>
-                                <spinner v-if="isLoadingHeaders"></spinner>
-                                <section v-else class="box-data">{{ headData['days'] }} $</section>
+                                <spinner v-if="isLoadingHeaders && !errorPlace.spends"></spinner>
+                                <section v-else-if="!errorPlace.spends" class="box-data">{{ headData['days'] }} $</section>
                             </mini-box>
                         </div>
                     </div>
                 </div>
                 <box-with-title @click="monthSpends" class="pointer">
                     <template v-slot:head>Monthly expenses</template>
-                    <spinner v-if="isLoadingMonthChart"></spinner>
-                    <chart v-else :data="monthChartData"></chart>
+                    <section v-if="errorPlace.monthlyChart"><box><error-data></error-data></box></section>
+                    <section v-else>
+                        <spinner v-if="isLoadingMonthChart"></spinner>
+                        <chart v-else :data="monthChartData"></chart>
+                    </section>
                 </box-with-title>
                 <box-with-title>
                     <template v-slot:head>Annual expenses by category</template>
-                    <spinner v-if="isLoadingCategoryChart"></spinner>
-                    <chart v-else :data="categoryChartData"></chart>
+                    <section v-if="errorPlace.categoryChart"><box><error-data></error-data></box></section>
+                    <section v-else>
+                        <spinner v-if="isLoadingCategoryChart"></spinner>
+                        <chart v-else :data="categoryChartData"></chart>
+                    </section>
                 </box-with-title>
                 <box-with-title>
                     <template v-slot:head>Annual expenses by product</template>
-                    <spinner v-if="isLoadingProductChart"></spinner>
-                    <chart v-else :data="productChartData"></chart>
+                    <section v-if="errorPlace.productChart"><box><error-data></error-data></box></section>
+                    <section v-else>
+                        <spinner v-if="isLoadingProductChart"></spinner>
+                        <chart v-else :data="productChartData"></chart>
+                    </section>
                 </box-with-title>
             </section>
         </section>
@@ -72,6 +85,12 @@ export default {
                 count: 0,
                 dialog: null,
                 message: null
+            },
+            errorPlace: {
+                spends: false,
+                monthlyChart: false,
+                categoryChart: false,
+                productChart: false
             },
             headData: null,
             monthChartData: {
@@ -136,6 +155,7 @@ export default {
             .catch(error => {
                 this.newError(error);
                 this.isLoadingHeaders = true;
+                this.errorPlace.spends = true;
             });
         },
         loadSpendsByMonthChart() {
@@ -168,6 +188,7 @@ export default {
             .catch(error => {
                 this.newError(error);
                 this.isLoadingMonthChart = true;
+                this.errorPlace.monthlyChart = true;
             });
         },
         loadCategorySpends() {
@@ -200,6 +221,7 @@ export default {
             .catch(error => {
                 this.newError(error);
                 this.isLoadingCategoryChart = true;
+                this.errorPlace.categoryChart = true;
             });
         },
         loadProductSpends() {
@@ -232,6 +254,7 @@ export default {
             .catch(error => {
                 this.newError(error);
                 this.isLoadingProductChart = true;
+                this.errorPlace.productChart = true;
             });
         },
     },
