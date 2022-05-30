@@ -3,6 +3,7 @@
 ![license](https://img.shields.io/badge/license-MIT-blue)
 ![linux](https://img.shields.io/badge/os-Linux-green)
 ![language](https://img.shields.io/badge/language-Python3.8-blue)
+![language](https://img.shields.io/badge/language-Django4.0-brightgreen)
 ![version](https://img.shields.io/badge/version-1.0.0-success)
 ![status](https://img.shields.io/badge/status-production-green)
 
@@ -40,7 +41,10 @@ Project is created with:
 * Django 4.0.4
 
 ## Setup
-TODO
+1. Enter the python virtual environment.
+2. Create a database using migration ```python manage.py migrate```.
+3. Create a user ```python manage.py createsuperuser```.
+4. TODO
 
 ## Features
 * Product and category dictionaries for better data management
