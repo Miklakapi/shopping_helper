@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.pagination import BasePagination
 
 
 class SpendsSerializer(serializers.Serializer):
@@ -20,11 +21,11 @@ class SpendsByMonthTableSerializer(serializers.Serializer):
     results = serializers.ListField(child=SpendsByMonthChartSerializer())
 
 
-class SpendsByCategoryChartSerializer(serializers.Serializer):
+class SpendsByCategorySerializer(serializers.Serializer):
     category_name = serializers.CharField()
     spends = serializers.FloatField()
 
 
-class SpendsByProductChartSerializer(serializers.Serializer):
+class SpendsByProductSerializer(serializers.Serializer):
     product_name = serializers.CharField()
     spends = serializers.FloatField()

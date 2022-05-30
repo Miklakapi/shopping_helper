@@ -8,5 +8,7 @@ urlpatterns = [
     path('spends-by-month-table/<int:year>', views.SpendsByMonthTableListAPIVIew.as_view()),
     path('spends-by-month-table', views.SpendsByMonthTableListAPIVIew.as_view(), name='month-table'),
     path('spends-by-category-chart', views.SpendsByCategoryChartListAPIVIew.as_view()),
+    path('spends-by-category-table', views.SpendsByCategoryTableListAPIVIew.as_view()),
     path('spends-by-product-chart', views.SpendsByProductChartListAPIVIew.as_view()),
+    path('spends-by-product-table', views.SpendsByProductTableListAPIVIew.as_view())
 ]

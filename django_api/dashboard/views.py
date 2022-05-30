@@ -6,9 +6,10 @@ from django.db.models import Sum
 from rest_framework.response import Response
 from django.urls import reverse
 from django.db.models import F
+from rest_framework.pagination import LimitOffsetPagination
 
 from history.models import History
-from .serializers import SpendsSerializer, SpendsByMonthChartSerializer, SpendsByMonthTableSerializer, SpendsByCategoryChartSerializer, SpendsByProductChartSerializer
+from .serializers import *
 
 
 class SpendsListAPIView(generics.ListAPIView):
@@ -130,7 +131,7 @@ class SpendsByCategoryChartListAPIVIew(generics.ListAPIView):
 
         qs = qs.values(category_name=F('product__category__name')).annotate(spends=Sum('price')).order_by('-spends')
 
-        serializer = SpendsByCategoryChartSerializer(qs[:12], many=True)
+        serializer = SpendsByCategorySerializer(qs[:12], many=True)
         return Response(serializer.data)
 
 
@@ -148,7 +149,53 @@ class SpendsByProductChartListAPIVIew(generics.ListAPIView):
 
         qs = qs.values(product_name=F('product__name')).annotate(spends=Sum('price')).order_by('-spends')
 
-        serializer = SpendsByProductChartSerializer(qs[:12], many=True)
+        serializer = SpendsByProductSerializer(qs[:12], many=True)
+        return Response(serializer.data)
+
+
+class SpendsByCategoryTableListAPIVIew(generics.ListAPIView, LimitOffsetPagination):
+    queryset = History.objects.all()
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super().get_queryset(*args, **kwargs)
+        return qs.filter(owner=self.request.user)
+
+
+    def list(self, *args, **kwargs):
+        qs = self.get_queryset()
+
+        qs = qs.values(category_name=F('product__category__name')).annotate(spends=Sum('price')).order_by('-spends')
+
+        results = self.paginate_queryset(qs)
+
+        if results is not None:
+            serializer = SpendsByCategorySerializer(results, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = SpendsByCategorySerializer(qs, many=True)
+        return Response(serializer.data)
+
+
+class SpendsByProductTableListAPIVIew(generics.ListAPIView, LimitOffsetPagination):
+    queryset = History.objects.all()
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super().get_queryset(*args, **kwargs)
+        return qs.filter(owner=self.request.user)
+
+
+    def list(self, *args, **kwargs):
+        qs = self.get_queryset()
+
+        qs = qs.values(product_name=F('product__name')).annotate(spends=Sum('price')).order_by('-spends')
+
+        results = self.paginate_queryset(qs)
+        
+        if results is not None:
+            serializer = SpendsByProductSerializer(results, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = SpendsByProductSerializer(qs, many=True)
         return Response(serializer.data)
 
 
