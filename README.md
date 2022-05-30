@@ -24,12 +24,13 @@ The website contains a login system based on an expiring token. Thanks to this s
 The backend works as a REST API, so the frontend written in VUE is not slowed down by the server. 
 
 <p align="center" width="100%">
-    <img width="33%" src="https://github.com/Miklakapi/shopping_helper/blob/master/README_IMAGES/Dashboard.png"> 
+    <img width="50%" src="https://github.com/Miklakapi/shopping_helper/blob/master/README_IMAGES/Dashboard.png"> 
     <br>
-    <img width="33%" src="https://github.com/Miklakapi/shopping_helper/blob/master/README_IMAGES/Dictionary.png"> 
-    <img width="33%" src="https://github.com/Miklakapi/shopping_helper/blob/master/README_IMAGES/List.png"> 
-    <img width="33%" src="https://github.com/Miklakapi/shopping_helper/blob/master/README_IMAGES/History.png"> 
-    <img width="33%" src="https://github.com/Miklakapi/shopping_helper/blob/master/README_IMAGES/Login.png"> 
+    <img width="32%" src="https://github.com/Miklakapi/shopping_helper/blob/master/README_IMAGES/Dictionary.png"> 
+    <img width="32%" src="https://github.com/Miklakapi/shopping_helper/blob/master/README_IMAGES/List.png"> 
+    <img width="32%" src="https://github.com/Miklakapi/shopping_helper/blob/master/README_IMAGES/History.png"> 
+    <br>
+    <img width="50%" src="https://github.com/Miklakapi/shopping_helper/blob/master/README_IMAGES/Login.png"> 
 </p>
 
 ## Technologies
