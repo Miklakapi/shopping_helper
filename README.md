@@ -41,10 +41,16 @@ Project is created with:
 * Django 4.0.4
 
 ## Setup
+### Django API
 1. Enter the python virtual environment.
 2. Create a database using migration ```python manage.py migrate```.
 3. Create a user ```python manage.py createsuperuser```.
-4. TODO
+4. Start API ```python manege.py runserver <adress:port>```
+5. Remember change API IP in Vue
+
+### Vue
+1. Run build ```npm run build```
+2. An application has been generated in catalog ```dist```
 
 ## Features
 * Product and category dictionaries for better data management
