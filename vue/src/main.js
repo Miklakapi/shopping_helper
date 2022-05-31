@@ -17,11 +17,15 @@ const app = createApp(App);
 
 app.use(store);
 try {
-    await store.dispatch('user/tryLogin');
+    store.dispatch('user/tryLogin').then(function () {
+        app.use(router);
+    });
 } catch(error) {
-    store.dispatch('user/logout');
+    store.dispatch('user/logout').then(function () {
+        app.use(router);
+    });
 }
-app.use(router);
+
 
 app.component('box', Box);
 app.component('boxWithTitle', BoxWithTitle);
